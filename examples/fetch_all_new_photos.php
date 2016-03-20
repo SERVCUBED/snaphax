@@ -1,4 +1,4 @@
-<?
+<?php
 	/*
 	Snaphax example: fetch all your new photo snaps
 
@@ -19,7 +19,7 @@
 		$opts = array();
 		$opts['username'] = $argv[1];
 		$opts['password'] = $argv[2];
-		// $opts['debug'] = 1; uncomment if having trouble
+		$opts['debug'] = 1; //uncomment if having trouble
 
 		$s = new Snaphax($opts);
 		$result = $s->login();

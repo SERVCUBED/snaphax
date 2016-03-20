@@ -1,4 +1,4 @@
-<?
+<?php
 	// upload snaps from the command line
 
 	require('../snaphax.php');

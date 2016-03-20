@@ -1,4 +1,4 @@
-<?
+<?php
 	// try to generate req_tokens from the command line
 
 	require('../snaphax.php');

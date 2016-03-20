@@ -31,7 +31,7 @@
 		'secret' => 'iEk21fuwZApXlz93750dmW22pw389dPwOk',
 		'static_token' => 'm198sOkJEn37DjqZ32lpRu76xmw288xSQ9',
 		'url' => 'https://feelinsonice-hrd.appspot.com',
-		'user_agent' => 'Snaphax 4.0.1 (iPad; iPhone OS 6.0; en_US)'
+		'user_agent' => 'Snapchat/9.26.1.0  (Nexus 5; Android 21; gzip)'
 	);
 
 	if (!function_exists('curl_init')) {
@@ -76,6 +76,37 @@
 			}
 			return $out;
 		}
+
+		function register() {
+			$ts = $this->api->time();
+			$out = $this->api->postCall(
+					'/bq/register',
+					array(
+							'email' => $this->options['email'],
+							'password' => $this->options['password'],
+							'timestamp' => $ts,
+							'birthday'=> '1994-11-15',
+							'age' => '19'
+					),
+					$this->options['static_token'],
+					$ts
+			);
+			return $out;
+		}
+		function registerUsername() {
+		$ts = $this->api->time();
+		$out = $this->api->postCall(
+				'/ph/registeru',
+				array(
+						'email' => $this->options['email'],
+						'username' => $this->options['username'],
+						'timestamp' => $ts
+				),
+				$this->options['static_token'],
+				$ts
+		);
+		return $out;
+	}
 		function fetch($id) {
 			if (!$this->auth_token) {
 				throw new Exception('no auth token');
@@ -208,6 +239,7 @@
 			curl_setopt($ch,CURLOPT_URL, $this->options['url'].$endpoint);
 			curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch,CURLOPT_USERAGENT, $this->options['user_agent']);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For Fiddler
 
 			if ($headers && is_array($headers)) {
 				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
