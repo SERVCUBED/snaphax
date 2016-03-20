@@ -1,8 +1,8 @@
 <?php
 	/*
-	SnapHax: a library for communicating with Snaphax	
+	SnapHax: a library for communicating with Snaphax
 	Implements a subset of the Snaphax API
-	
+
 	(c) Copyright 2012 Thomas Lackner <lackner@gmail.com>
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,15 +23,15 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
 	*/
-	
+
 	$SNAPHAX_DEFAULT_OPTIONS = array(
 		'blob_enc_key' => 'M02cnQ51Ji97vwT4',
 		'debug' => false,
 		'pattern' => '0001110111101110001111010101111011010001001110011000110001000110',
 		'secret' => 'iEk21fuwZApXlz93750dmW22pw389dPwOk',
 		'static_token' => 'm198sOkJEn37DjqZ32lpRu76xmw288xSQ9',
-		'url' => 'https://feelinsonice-hrd.appspot.com',
-		'user_agent' => 'Snapchat/9.26.1.0  (Nexus 5; Android 21; gzip)'
+		'url' => 'https://app.snapchat.com',
+		'user_agent' => 'Snapchat/9.26.1.0 (Nexus 5; Android 21; gzip)'
 	);
 
 	if (!function_exists('curl_init')) {
@@ -61,14 +61,14 @@
 		function login() {
 			$ts = $this->api->time();
 			$out = $this->api->postCall(
-				'/bq/login',
+				'/loq/login',
 				array(
 					'username' => $this->options['username'],
 					'password' => $this->options['password'],
 					'timestamp' => $ts
 				),
-				$this->options['static_token'], 
-				$ts
+                $this->options['static_token'],
+                $ts
 			);
 			if (is_array($out) &&
 					!empty($out['auth_token'])) {
@@ -80,7 +80,7 @@
 		function register() {
 			$ts = $this->api->time();
 			$out = $this->api->postCall(
-					'/bq/register',
+					'/loq/register',
 					array(
 							'email' => $this->options['email'],
 							'password' => $this->options['password'],
@@ -115,7 +115,7 @@
 			$url = "/bq/blob";
 			$result = $this->api->postCall($url, array(
 				'id' => $id,
-				'timestamp' => $ts, 
+				'timestamp' => $ts,
 				'username' => urlencode($this->options['username'])
 			), $this->auth_token, $ts, 0);
 			$this->api->debug('blob result', $result);
@@ -139,7 +139,7 @@
 			return $this->api->hash($param1, $param2);
 		}
 		function upload($file_data, $type, $recipients, $time=8) {
-			if ($type != self::MEDIA_IMAGE && $type != self::MEDIA_VIDEO) 
+			if ($type != self::MEDIA_IMAGE && $type != self::MEDIA_VIDEO)
 				throw new Exception('Snaphax: upload type must be MEDIA_IMAGE or MEDIA_VIDEO');
 			if (!$this->auth_token) {
 				throw new Exception('no auth token');
@@ -162,7 +162,7 @@
 					'data' => '@/tmp/blah.jpg;filename=file',
 					'media_id' => $media_id
 				),
-				$this->auth_token, 
+				$this->auth_token,
 				$ts,
 				0,
 				array("Content-type: multipart/form-data")
@@ -180,7 +180,7 @@
 						'media_id' => $media_id,
 						'time' => $time
 					),
-					$this->auth_token, 
+					$this->auth_token,
 					$ts,
 					0
 				);
@@ -193,7 +193,7 @@
 
 	class SnaphaxApi {
 		// Low level code to communicate with Snapchat via HTTP
-		
+
 		function SnaphaxApi($options) {
 			$this->options = $options;
 		}
@@ -216,7 +216,7 @@
 
 		function isValidBlobHeader($header) {
 			if (($header[0] == chr(00) && // mp4
-					 $header[0] == chr(00)) || 
+					 $header[0] == chr(00)) ||
 					($header[0] == chr(0xFF) && // jpg
 					 $header[1] == chr(0xD8)))
 				return true;
@@ -247,7 +247,7 @@
 
 			$post_data['req_token'] = $this->hash($param1, $param2);
 			curl_setopt($ch, CURLOPT_POST, count($post_data));
-			if (!$headers) 
+			if (!$headers)
 				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_data));
 			else
 				curl_setopt($ch,CURLOPT_POSTFIELDS, $post_data);
