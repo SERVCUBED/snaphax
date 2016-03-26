@@ -30,8 +30,8 @@
 		'pattern' => '0001110111101110001111010101111011010001001110011000110001000110',
 		'secret' => 'iEk21fuwZApXlz93750dmW22pw389dPwOk',
 		'static_token' => 'm198sOkJEn37DjqZ32lpRu76xmw288xSQ9',
-		'url' => 'https://app.snapchat.com',
-		'user_agent' => 'Snapchat/9.26.1.0 (Nexus 5; Android 21; gzip)'
+		'url' => 'https://feelinsonice-hrd.appspot.com',
+		'user_agent' => 'Snapchat/8.1.1 (Nexus 5; Android 21; gzip)'
 	);
 
 	if (!function_exists('curl_init')) {
@@ -239,11 +239,15 @@
 			curl_setopt($ch,CURLOPT_URL, $this->options['url'].$endpoint);
 			curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch,CURLOPT_USERAGENT, $this->options['user_agent']);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For Fiddler
+			//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For Fiddler
+			//curl_setopt($ch, CURLOPT_PROXY, '127.0.0.1:8888'); // For Fiddler
 
-			if ($headers && is_array($headers)) {
-				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			if (!$headers) {
+				$headers = array();
 			}
+			$headers[] = 'Accept-Language=en-US;q=1, en;q=0.9';
+			$headers[] = 'Accept-Locale=en-US';
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 			$post_data['req_token'] = $this->hash($param1, $param2);
 			curl_setopt($ch, CURLOPT_POST, count($post_data));
@@ -301,10 +305,7 @@
 		}
 
 		function time() {
-			return round(microtime(true) * 1000);
+			return (String)round(microtime(true) * 1000);
 		}
 
 	}
-
-
-?>
