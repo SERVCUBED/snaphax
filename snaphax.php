@@ -245,8 +245,8 @@
             if (!$headers) {
                 $headers = array();
             }
-            $headers[] = 'Accept-Language=en-US;q=1, en;q=0.9';
-            $headers[] = 'Accept-Locale=en-US';
+            $headers[] = 'Accept-Language:en-US;q=1, en;q=0.9';
+            $headers[] = 'Accept-Locale:en-US';
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
             $post_data['req_token'] = $this->hash($param1, $param2);
